@@ -41,3 +41,14 @@ struct input //=5字节
 5字节 * 30次 * 6人= 900字节
 1MB带宽（=1024KB=2^20字节） ≈ 1048576 / 900 = 1165人
 2MB ≈ 2300人
+
+
+post:
+1.1. application/x-www-form-urlencoded（如果不设置 enctype 属性，Unity的WWWForm是这个）
+		user=test&pwd=666
+1.2. form-data（浏览器原生表单）
+		<form action="form_action.asp" enctype="text/plain">
+			<input type="" name="">
+		</form>
+2. multipart/form-data
+3. application/json

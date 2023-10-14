@@ -1,9 +1,12 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using Random = System.Random;
 using Debug = UnityEngine.Debug;
+using UnityEngine.Analytics;
 
 // 委托致使性能下降
 public class TestDelegate : MonoBehaviour
@@ -78,5 +81,26 @@ public class TestDelegate : MonoBehaviour
         timer.Stop();
         var micro = timer.Elapsed.Ticks / 10m;
         Debug.Log($"Use {micro} ms");
+    }
+
+    public void WWWPOST()
+    {
+        StartCoroutine(post());
+    }
+    IEnumerator post()
+    {
+        string url = "http://localhost:8080/api/relationship/toFriend";
+        WWWForm form = new WWWForm();
+        form.AddField("name", "test");
+        form.AddField("pwd", 666);
+
+        WWW www = new WWW(url, form);
+        yield return www;
+
+        if (!string.IsNullOrEmpty(www.error))
+        {
+            Debug.Log(www.error);
+        }
+        Debug.Log(www.text);
     }
 }
