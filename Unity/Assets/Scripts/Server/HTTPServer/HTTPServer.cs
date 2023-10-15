@@ -142,7 +142,9 @@ public class HTTPServer : MonoBehaviour
                             {
                                 // 认为是访问网页
                                 // 从本地wwwroot文件夹读取.html文件
-                                responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
+
+                                responseString = GetHtmlAddress();
+                                //responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
                             }
                             else
                             {
@@ -184,7 +186,7 @@ public class HTTPServer : MonoBehaviour
                     //<<<<
                     if (lst.Count() == 0)
                     {
-                        Debug.LogError("找不到方法");
+                        //Debug.LogError("找不到方法");
                     }
                     else
                     {
@@ -243,6 +245,17 @@ public class HTTPServer : MonoBehaviour
 
         var obj = JsonUtility.FromJson<User>(json);
         Debug.Log($"解析：用户名{obj.user}，密码{obj.pwd}");
+    }
+
+    private static string GetHtmlAddress()
+    {
+        //var t = Resources.Load("index"); //该API只能在主线程用
+        //var file = ((TextAsset)t).text;
+        //string wwwRoot = Directory.GetCurrentDirectory(); //Unity.sln所在目录
+        string wwwRoot = Environment.CurrentDirectory; //Unity.sln所在目录
+        Debug.Log(wwwRoot);
+        string file = File.ReadAllText($"{wwwRoot}/www/index.html");
+        return file;
     }
 }
 
