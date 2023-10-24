@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Text;
 using System.Linq;
 using System.Threading;
 using System.Reflection;
@@ -17,6 +16,8 @@ public class HTTPServer : MonoBehaviour
     {
         "http://localhost:8080/",
     };
+
+    static string cachedInfo;
 
     void Start()
     {
@@ -41,6 +42,12 @@ public class HTTPServer : MonoBehaviour
 
         listener.Start();
 
+        cachedInfo = 
+            $"<br>Device Id: {SystemInfo.deviceUniqueIdentifier}</br>" +
+            $"<br>Device Model: {SystemInfo.deviceModel}</br>" +
+            $"<br>Device Name: {SystemInfo.deviceName}</br>" +
+            $"<br>Device Type: {SystemInfo.deviceType}</br>" +
+            $"<br>Graphics Device Id: {SystemInfo.graphicsDeviceID}</br>";
 
         Thread t = new Thread(SimpleListenerExample);
         t.Start();
@@ -143,8 +150,8 @@ public class HTTPServer : MonoBehaviour
                                 // 认为是访问网页
                                 // 从本地wwwroot文件夹读取.html文件
 
-                                responseString = GetHtmlAddress();
-                                //responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
+                                //responseString = GetHtmlAddress();
+                                responseString = DefaultDashboard();
                             }
                             else
                             {
@@ -256,6 +263,23 @@ public class HTTPServer : MonoBehaviour
         Debug.Log(wwwRoot);
         string file = File.ReadAllText($"{wwwRoot}/www/index.html");
         return file;
+    }
+
+    private static string Default404Page()
+    {
+        return "404";
+    }
+
+    private static string DefaultDashboard()
+    {
+        string content = "<html><body>" + cachedInfo + "</body></html>";
+        return content;
+    }
+
+    private static string DefaultIndex()
+    {
+        string content = "<HTML><BODY> Hello world!</BODY></HTML>";
+        return content;
     }
 }
 

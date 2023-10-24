@@ -68,44 +68,11 @@ namespace Code.Client
                 IPv6Enabled = IPv6Mode.Disabled
             };
             _netManager.Start();
-
-            ThreadStart childRef = new ThreadStart(ThreadTest1);
-            childThread = new Thread(childRef);
-            childThread.Start();
         }
 
-        void Start()
+        public void StartConnect()
         {
             Connect("localhost", null);
-        }
-
-        static int add_value = 1;
-        Thread childThread = null;
-        Queue<int> active = new Queue<int>();
-
-        public void ThreadTest1()
-        {
-            while (true)
-            {
-                add_value++;
-                if (Application.platform == RuntimePlatform.Android)
-                {
-                    print("ThreadTest1 is working:" + add_value);
-
-                    //OnShoot(); //这里是线程里。需要通过Update到主线程执行。
-                    if (_server != null)
-                        active.Enqueue(add_value);
-                }
-                Thread.Sleep(1000);
-            }
-        }
-
-        public void CloseThread()
-        {
-            if (childThread != null)
-            {
-                childThread.Abort();
-            }
         }
 
         void OnLogicUpdate()
@@ -125,20 +92,11 @@ namespace Code.Client
             //            $"Ping: {_ping}");
             //else
             //    _debugText.text = "Disconnected";
-
-
-            if (active.Count > 0)
-            {
-                var value = active.Dequeue();
-                Debug.Log($"已连接，主线程射击: {value}");
-                //OnShoot();
-            }
         }
 
-        private void OnDestroy()
+        void OnDestroy()
         {
             _netManager.Stop();
-            CloseThread();
         }
 
         void FixedUpdate()
@@ -146,20 +104,20 @@ namespace Code.Client
             //Debug.Log($"<color=grey>FixedUpdate - {_userName}</color>");
         }
 
-        void OnApplicationPause(bool pause)
-        {
-            Debug.Log($"<color=orange>OnApplicationPause: {pause} - {_userName}</color>");
-        }
+        //void OnApplicationPause(bool pause)
+        //{
+        //    Debug.Log($"<color=orange>OnApplicationPause: {pause} - {_userName}</color>");
+        //}
 
-        void OnApplicationFocus(bool focus)
-        {
-            Debug.Log($"<color=green>OnApplicationFocus: {focus} - {_userName}</color>");
-        }
+        //void OnApplicationFocus(bool focus)
+        //{
+        //    Debug.Log($"<color=green>OnApplicationFocus: {focus} - {_userName}</color>");
+        //}
 
-        void OnApplicationQuit()
-        {
-            Debug.Log($"<color=red>OnApplicationQuit - {_userName}</color>");
-        }
+        //void OnApplicationQuit()
+        //{
+        //    Debug.Log($"<color=red>OnApplicationQuit - {_userName}</color>");
+        //}
 
         // 广播加入状态
         //private void OnPlayerJoined(PlayerJoinedPacket packet)
